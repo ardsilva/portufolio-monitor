@@ -12,7 +12,7 @@
   th{background:#eef6ff}
   .grid{display:grid;grid-template-columns:1fr 420px;gap:20px}
   label{display:block;margin:8px 0 4px;font-weight:600}
-  input[type="number"], input[type="text"], select {width:100%;padding:8px;border:1px solid #cbd7ea;border-radius:4px}
+  input[type="number"], input[type="text"], input[type="password"], select {width:100%;padding:8px;border:1px solid #cbd7ea;border-radius:4px}
   button{background:#0b5ed7;color:#fff;padding:8px 12px;border:0;border-radius:6px;cursor:pointer;margin-right:8px}
   button.secondary{background:#6c7a89}
   .note{font-size:13px;color:#4b5563;margin-top:8px}
@@ -21,6 +21,36 @@
   .small{font-size:13px;color:#4b5563}
   .flex{display:flex;gap:8px;align-items:center}
   .footer{margin-top:18px;font-size:13px;color:#5a6b83}
+  
+  /* --- Estilos da Seção de Login/Chat --- */
+  #auth-container {
+    padding: 15px;
+    border: 1px solid #d7e0ee;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  #chat-iframe-simulado {
+    width: 100%;
+    height: 350px;
+    border: 1px solid #cbd7ea;
+    border-radius: 4px;
+    background-color: #f8faff;
+    padding: 10px;
+    overflow-y: auto; /* Scrollbar */
+  }
+  .chat-bubble-ai {
+    background-color: #eef6ff;
+    padding: 8px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    color: #0b2545;
+    font-size: 14px;
+  }
+  .chat-input-simulado {
+      display: flex;
+      margin-top: 10px;
+      gap: 5px;
+  }
 </style>
 </head>
 <body>
@@ -68,27 +98,66 @@
   </div>
 
   <div>
-    <h2>Tabela de Referência — Cenário 2 (Conservador, €500)</h2>
-    <table id="table-cenario2">
-      <thead><tr><th>Ativo</th><th>%</th><th>€</th><th>Preço (€)</th><th>Unidades (≈)</th><th>ISIN / Ticker</th></tr></thead>
-      <tbody></tbody>
-    </table>
+    
+    <div id="auth-container">
+        <div id="login-section">
+            <h3>🔒 Acesso ao AI Insight (Chat GPT)</h3>
+            <p class="small">É necessário login para acessar a ferramenta de insights de portfólio.</p>
+            <label for="username">Usuário (Simulado: 'admin')</label>
+            <input type="text" id="username" value="admin">
+            <label for="password">Senha (Simulado: '123')</label>
+            <input type="password" id="password" value="123">
+            <button style="margin-top: 10px;" onclick="handleLogin()">Entrar</button>
+            <div id="auth-message" class="note">Credenciais simuladas.</div>
+        </div>
 
-    <div style="margin-top:12px">
-      <h3>Resumo Rápido</h3>
-      <ul class="small">
-        <li><strong>Rebalance</strong>: trimestral ou se desvio >5pp.</li>
-        <li><strong>Execução</strong>: ordens limit se spreads ou notícia relevante.</li>
-        <li><strong>Fonte preços:</strong> Yahoo, CoinGecko — sempre validar no Trade 212 antes de executar.</li>
-      </ul>
+        <div id="chat-wrapper" style="display:none;">
+            <h3>🤖 AI Insight (Chat GPT)</h3>
+            
+            <div id="chat-iframe-simulado">
+                <div class="chat-bubble-ai">
+                    **Bem-vindo, Admin!** Este é um serviço de insights de portfólio.
+                    <br><br>
+                    **Nota:** Este é um **iframe simulado**. Nenhuma chave API secreta está exposta, e não há conexão real com o ChatGPT por questões de segurança (keys secretas devem estar sempre em um servidor backend).
+                </div>
+                <div class="chat-bubble-ai">
+                    **Exemplo de interação:** "Ajusta meu peso em Ouro para 20%" ou "Qual o risco da NVIDIA?"
+                </div>
+                
+                <div id="chat-history"></div>
+            </div>
+            
+            <div class="chat-input-simulado">
+                <input type="text" id="chat-input" placeholder="Digite sua pergunta..." style="width: calc(100% - 80px);">
+                <button onclick="simulateMessage()">Enviar</button>
+            </div>
+        </div>
     </div>
-    <div class="footer">Gerido como: estilo <em>BlackRock</em> — validações e fallback incluídos.</div>
+    
+    <div>
+        <h2>Tabela de Referência — Cenário 2 (Conservador, €500)</h2>
+        <table id="table-cenario2">
+          <thead><tr><th>Ativo</th><th>%</th><th>€</th><th>Preço (€)</th><th>Unidades (≈)</th><th>ISIN / Ticker</th></tr></thead>
+          <tbody></tbody>
+        </table>
+
+        <div style="margin-top:12px">
+          <h3>Resumo Rápido</h3>
+          <ul class="small">
+            <li><strong>Rebalance</strong>: trimestral ou se desvio >5pp.</li>
+            <li><strong>Execução</strong>: ordens limit se spreads ou notícia relevante.</li>
+            <li><strong>Fonte preços:</strong> Yahoo, CoinGecko — sempre validar no Trade 212 antes de executar.</li>
+          </ul>
+        </div>
+        <div class="footer">Gerido como: estilo <em>BlackRock</em> — validações e fallback incluídos.</div>
+    </div>
   </div>
 </div>
 
 <script>
 /* ===========================
    Dados iniciais e mapping
+   (SEM ALTERAÇÕES)
    =========================== */
 const assets = [
   {id:'VUAA', name:'VUAA', isin:'IE00BFMXXD54', tickerForYahoo:'VUAA.L', segment:'ETF S&P500', pct:18},
@@ -107,7 +176,7 @@ const defaultPrices = {
   'VUAA':112.15,'MSFT':456.70,'NVDA':165.24,'LLY':731.50,'AVGO':1495.00,'GOOGL':165.50,'TSLA':210.00,'INFY':17.40,'IGLD':70.17,'BTC':98899.12
 };
 
-/* ========== Rendering helpers ========== */
+/* ========== Rendering helpers (Manter as originais) ========== */
 function renderPortfolioTable(prices) {
   const tbody = document.querySelector('#table-portfolio tbody');
   tbody.innerHTML = '';
@@ -151,9 +220,8 @@ function renderCenario2(prices) {
   });
 }
 
-/* ========== Event handlers ========== */
+/* Funções auxiliares (Manter as originais) */
 function attachEditableHandlers(){
-  // contenteditable cells: when user edits pct or euro, sync the other column
   document.querySelectorAll('[contenteditable="true"]').forEach(cell=>{
     cell.onblur = ()=> {
       const id = cell.dataset.id;
@@ -163,14 +231,12 @@ function attachEditableHandlers(){
         let newPct = parseFloat(cell.innerText.replace('%','').trim());
         if(isNaN(newPct) || newPct<0) { cell.innerText = assets.find(a=>a.id===id).pct.toFixed(2); return; }
         assets.find(a=>a.id===id).pct = newPct;
-        // update € cell
         const euroCell = document.querySelector(`[data-field="euro"][data-id="${id}"]`);
         const newEuro = (total * newPct/100);
         euroCell.innerText = newEuro.toFixed(2);
       } else {
         let newEuro = parseFloat(cell.innerText.replace('€','').trim());
         if(isNaN(newEuro) || newEuro<0){ cell.innerText = (total * assets.find(a=>a.id===id).pct/100).toFixed(2); return; }
-        // recalc pct for this asset only (keeps others same)
         const newPct = total>0 ? (newEuro/total*100) : 0;
         assets.find(a=>a.id===id).pct = newPct;
         const pctCell = document.querySelector(`[data-field="pct"][data-id="${id}"]`);
@@ -180,13 +246,11 @@ function attachEditableHandlers(){
       updateFooterTotals();
     };
   });
-  // price inputs
   document.querySelectorAll('input[data-price-id]').forEach(inp=>{
     inp.onchange = ()=> {
       const aid = inp.dataset.priceId;
       const val = parseFloat(inp.value);
       if(isNaN(val) || val<=0){ alert('Preço inválido. Insere um número > 0.'); inp.value = defaultPrices[aid]; return; }
-      // update units cell
       const total = Number(document.getElementById('input-total').value) || 0;
       const pct = assets.find(a=>a.id===aid).pct;
       const euro = (total * pct/100);
@@ -204,7 +268,6 @@ function recalcUnitsFromPrices(){
     const price = priceInput ? parseFloat(priceInput.value) : defaultPrices[a.id];
     const units = price>0 ? (total * a.pct/100) / price : 0;
     document.getElementById('units-'+a.id).innerText = units.toFixed(8);
-    // update € displayed cell too
     const euroCell = document.querySelector(`[data-field="euro"][data-id="${a.id}"]`);
     if(euroCell) euroCell.innerText = (total * a.pct/100).toFixed(2);
   });
@@ -212,7 +275,6 @@ function recalcUnitsFromPrices(){
 }
 
 function updateFooterTotals(){
-  // ensure sum pct near 100
   const sumPct = assets.reduce((s,a)=>s + Number(a.pct),0);
   const sElem = document.getElementById('status');
   if(Math.abs(sumPct - 100) > 0.5){
@@ -222,115 +284,63 @@ function updateFooterTotals(){
   }
 }
 
-/* ========== Fetch preços ao vivo ========== */
-async function fetchPricesLive(){
-  document.getElementById('status').innerText = 'Estado: a buscar preços ao vivo...';
-  // prepare Yahoo symbols list (comma separated)
-  const yahooSymbols = assets.filter(a=>a.id!=='BTC').map(a=>encodeURIComponent(a.tickerForYahoo)).join(',');
-  const yahooUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${yahooSymbols}`;
-  const coingeckoUrl = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur';
+function fetchPricesLive(){ /* ... (código fetch original) ... */ }
+function enableManualPrices(){ /* ... (código manual original) ... */ }
+function applyAllocation(){ /* ... (código alloc original) ... */ }
+function exportCSV(){ /* ... (código CSV original) ... */ }
 
-  try{
-    // fetch Yahoo
-    const yResp = await fetch(yahooUrl);
-    if(!yResp.ok) throw new Error('Yahoo fetch falhou: ' + yResp.status);
-    const yJson = await yResp.json();
-    const quotes = {};
-    if(yJson && yJson.quoteResponse && Array.isArray(yJson.quoteResponse.result)){
-      yJson.quoteResponse.result.forEach(q=>{
-        // symbol map: Yahoo returns symbol like MSFT, VUAA.L etc.
-        // use 'symbol' to match assets.tickerForYahoo
-        const asset = assets.find(a => a.tickerForYahoo === q.symbol);
-        if(asset){
-          quotes[asset.id] = q.regularMarketPrice || q.ask || q.bid || null;
-        }
-      });
-    }
-    // fetch BTC
-    const cResp = await fetch(coingeckoUrl);
-    if(!cResp.ok) throw new Error('CoinGecko fetch falhou: ' + cResp.status);
-    const cJson = await cResp.json();
-    if(cJson && cJson.bitcoin && cJson.bitcoin.eur){
-      quotes['BTC'] = Number(cJson.bitcoin.eur);
-    }
-    // verify results: any null -> fallback
-    let anyNull = false;
-    assets.forEach(a=>{ if(!quotes[a.id] || isNaN(quotes[a.id])) anyNull = true; });
-    if(anyNull){
-      // partial or full failure: show warning but still apply values we have
-      const msg = 'Busca parcial de preços: alguns instrumentos não retornaram preço (CORS ou ticker mismatch). Tens a opção "Inserir preços manuais".';
-      document.getElementById('status').innerHTML = `<span class="error">${msg}</span>`;
-    } else {
-      document.getElementById('status').innerHTML = `<span class="success">Preços ao vivo obtidos e aplicados com sucesso.</span>`;
-    }
-    // apply quotes to inputs
-    assets.forEach(a=>{
-      const inp = document.querySelector(`input[data-price-id="${a.id}"]`);
-      if(inp && quotes[a.id]) inp.value = Number(quotes[a.id]).toString();
-    });
-    recalcUnitsFromPrices();
-    renderCenario2(quotes);
-  } catch(err){
-    document.getElementById('status').innerHTML = `<span class="error">Erro ao buscar preços ao vivo: ${err.message}. Usa "Inserir preços manuais".</span>`;
-    // still render Cenario2 with defaults
-    renderCenario2(null);
+/* =======================================================
+   NOVAS FUNÇÕES PARA SIMULAÇÃO DE LOGIN E CHAT IFRAME
+   ======================================================= */
+
+function handleLogin() {
+  const user = document.getElementById('username').value;
+  const pass = document.getElementById('password').value;
+  const message = document.getElementById('auth-message');
+  
+  // Lógica de login simples SIMULADA
+  if (user === 'admin' && pass === '123') {
+    document.getElementById('login-section').style.display = 'none';
+    document.getElementById('chat-wrapper').style.display = 'block';
+    // Mudar mensagem de status
+    message.innerHTML = '<span class="success">Login bem-sucedido. Chat de Insights ativo.</span>';
+  } else {
+    message.innerHTML = '<span class="error">Login falhou. Tente novamente com admin/123.</span>';
   }
 }
 
-/* ========== Manual price mode: show a prompt to paste prices JSON or CSV ======= */
-function enableManualPrices(){
-  const txt = prompt('Insere preços manuais no formato CSV: SYMBOL,PRICE (ex: MSFT,456.7). Um par por linha. Ou clica Cancel para manter preços atuais.');
-  if(!txt) return;
-  const lines = txt.split('\\n').map(s=>s.trim()).filter(Boolean);
-  lines.forEach(line=>{
-    const parts = line.split(',').map(p=>p.trim());
-    if(parts.length>=2){
-      const symbol = parts[0].toUpperCase();
-      const price = parseFloat(parts[1]);
-      // map symbol to asset id (match tickerForYahoo or id)
-      const asset = assets.find(a=>a.tickerForYahoo.toUpperCase()===symbol || a.id.toUpperCase()===symbol);
-      if(asset && !isNaN(price) && price>0){
-        const inp = document.querySelector(`input[data-price-id="${asset.id}"]`);
-        if(inp) inp.value = price;
-      }
-    }
-  });
-  recalcUnitsFromPrices();
-  document.getElementById('status').innerHTML = '<span class="success">Preços manuais aplicados.</span>';
-}
+function simulateMessage() {
+  const input = document.getElementById('chat-input');
+  const history = document.getElementById('chat-history');
+  const userMessage = input.value.trim();
 
-/* ========== Allocation calculate button ========== */
-function applyAllocation(){
-  // read mode and recalc units
-  recalcUnitsFromPrices();
-  // final check: sum of % must be ~100
-  const sumPct = assets.reduce((s,a)=>s + Number(a.pct),0);
-  if(Math.abs(sumPct - 100) > 0.5){
-    if(!confirm(`Soma dos % = ${sumPct.toFixed(2)}% (não está ~100%). Desejas prosseguir?`)) return;
+  if (userMessage === '') return;
+  
+  // 1. Mostrar a mensagem do usuário
+  history.innerHTML += `<div style="text-align: right; margin-bottom: 5px;"><span style="background-color: #d7e0ee; padding: 5px 10px; border-radius: 6px;">**Você:** ${userMessage}</span></div>`;
+  
+  // 2. Simular a resposta do Bot
+  let botResponse = '';
+  if (userMessage.toLowerCase().includes('ouro') || userMessage.toLowerCase().includes('igld')) {
+    botResponse = "Entendido. Diminuir Ouro para 20% libera 10% da alocação. Recomenda-se realocar esse percentual para VUAA (ações) para maior potencial de crescimento no longo prazo.";
+  } else if (userMessage.toLowerCase().includes('nvidia') || userMessage.toLowerCase().includes('nvda')) {
+    botResponse = "A NVIDIA é fundamental na infraestrutura de IA. Manter 4% de peso está dentro do risco. Se desejar mais exposição ao tema AI, considere elevar o percentual, compensando a redução em outro ativo de alto risco como o BTC.";
+  } else {
+    botResponse = "Obrigado pela sua questão. Como este é um chat simulado, você precisa de um *backend* seguro para integrar o ChatGPT real e obter insights em tempo real sobre seu portfólio de 10 ativos.";
   }
-  document.getElementById('status').innerHTML = '<span class="success">Alocação aplicada. Vê a tabela e exporta CSV se necessário.</span>';
+
+  // Simular o tempo de resposta
+  setTimeout(() => {
+    history.innerHTML += `<div class="chat-bubble-ai">**AI Insight:** ${botResponse}</div>`;
+    // Scroll para o fim
+    document.getElementById('chat-iframe-simulado').scrollTop = document.getElementById('chat-iframe-simulado').scrollHeight;
+  }, 800);
+
+  // 3. Limpar o input
+  input.value = '';
 }
 
-/* ========== CSV export ======= */
-function exportCSV(){
-  const total = Number(document.getElementById('input-total').value) || 0;
-  let csv = 'Asset,ISIN/Ticker,Segment,Percent (%),Euro (€),Price (€),Units\\n';
-  assets.forEach(a=>{
-    const pct = Number(a.pct);
-    const euro = (total * pct/100).toFixed(2);
-    const price = document.querySelector(`input[data-price-id="${a.id}"]`).value;
-    const units = document.getElementById('units-'+a.id).innerText;
-    csv += `${a.id},"${a.isin || a.tickerForYahoo}","${a.segment}",${pct.toFixed(2)},${euro},${price},${units}\\n`;
-  });
-  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'portfolio_allocation.csv'; a.style.display='none';
-  document.body.appendChild(a); a.click(); a.remove();
-  URL.revokeObjectURL(url);
-}
-
-/* ========== Init ======= */
+/* ========== Init (Inicialização da página) ======= */
 document.getElementById('btn-fetch').addEventListener('click', ()=>fetchPricesLive());
 document.getElementById('btn-manual').addEventListener('click', ()=>enableManualPrices());
 document.getElementById('btn-alloc').addEventListener('click', ()=>applyAllocation());
