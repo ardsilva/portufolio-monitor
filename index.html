@@ -2,138 +2,211 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>Monitoramento Inteligente - Portfólio 10 Ativos</title>
+  <title>📊 Monitor de Carteira - Gestão Manual</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; background: #0a0a0a; color: #e0e0e0; margin: 20px; }
-    h1 { color: #00ffcc; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td { border: 1px solid #444; padding: 10px; text-align: center; }
-    th { background-color: #1e1e1e; }
-    input[type="text"] { width: 80px; text-align: right; background: #1a1a1a; color: #fff; border: 1px solid #444; border-radius: 3px; }
-    button { background: #00ffcc; color: #000; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; margin-top: 20px; }
-    button:hover { background: #00e0b3; }
-    .footer { margin-top: 20px; font-size: 12px; color: #888; }
+    body {
+      background: #0a0a0a;
+      color: #e0e0e0;
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    h1, h2 { color: #00ffcc; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #444;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background: #1e1e1e;
+    }
+    input[type="number"] {
+      background: #1a1a1a;
+      color: #fff;
+      border: 1px solid #444;
+      border-radius: 3px;
+      text-align: right;
+      width: 90px;
+    }
+    .gain { color: #00ff99; }
+    .loss { color: #ff6666; }
+    canvas { margin-top: 40px; }
   </style>
 </head>
 <body>
-  <h1>📈 Monitoramento Inteligente - Portfólio Longo Prazo</h1>
-  <p>Busca automática de preços em EUR (TwelveData → CoinGecko → Google Finance → Manual)</p>
 
-  <table id="portfolioTable">
+  <h1>📈 Monitoramento de Carteira (Atual + Futura)</h1>
+  <p>Atualize manualmente o preço atual para ver ganhos/perdas e projeção da carteira.</p>
+
+  <h2>1️⃣ Carteira Atual</h2>
+  <table id="currentTable">
     <thead>
       <tr>
         <th>Ativo</th>
-        <th>%</th>
-        <th>Valor (€)</th>
-        <th>Preço Atual (€)</th>
         <th>Unidades</th>
-        <th>Segmento</th>
+        <th>Investido (€)</th>
+        <th>Preço Atual (€)</th>
+        <th>Valor Atual (€)</th>
+        <th>Ganho/Perda (€)</th>
+        <th>Ganho/Perda (%)</th>
       </tr>
     </thead>
-    <tbody></tbody>
+    <tbody>
+      <tr>
+        <td>VUAA.MIL</td>
+        <td>5.59244187</td>
+        <td>630.49</td>
+        <td><input type="number" step="0.01" placeholder="Preço atual"></td>
+        <td class="valorAtual">—</td>
+        <td class="ganhoValor">—</td>
+        <td class="ganhoPerc">—</td>
+      </tr>
+      <tr>
+        <td>QSVE.XETR</td>
+        <td>16.49031194</td>
+        <td>604.53</td>
+        <td><input type="number" step="0.01" placeholder="Preço atual"></td>
+        <td class="valorAtual">—</td>
+        <td class="ganhoValor">—</td>
+        <td class="ganhoPerc">—</td>
+      </tr>
+      <tr>
+        <td>IGLD.XETR</td>
+        <td>7.64058679</td>
+        <td>557.15</td>
+        <td><input type="number" step="0.01" placeholder="Preço atual"></td>
+        <td class="valorAtual">—</td>
+        <td class="ganhoValor">—</td>
+        <td class="ganhoPerc">—</td>
+      </tr>
+      <tr>
+        <td>MSFT</td>
+        <td>1.0208905</td>
+        <td>448.00</td>
+        <td><input type="number" step="0.01" placeholder="Preço atual"></td>
+        <td class="valorAtual">—</td>
+        <td class="ganhoValor">—</td>
+        <td class="ganhoPerc">—</td>
+      </tr>
+    </tbody>
   </table>
 
-  <button onclick="updatePortfolio()">🔄 Atualizar Preços</button>
+  <h2>2️⃣ Futuras Oportunidades</h2>
+  <table id="futureTable">
+    <thead>
+      <tr>
+        <th>Ativo</th>
+        <th>Valor Planeado (€)</th>
+        <th>Preço Atual (€)</th>
+        <th>Unidades Est.</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>NVDA</td><td contenteditable="true">100</td><td><input type="number" step="0.01" placeholder="Preço"></td><td class="units">—</td></tr>
+      <tr><td>LLY</td><td contenteditable="true">100</td><td><input type="number" step="0.01" placeholder="Preço"></td><td class="units">—</td></tr>
+      <tr><td>AVGO</td><td contenteditable="true">100</td><td><input type="number" step="0.01" placeholder="Preço"></td><td class="units">—</td></tr>
+      <tr><td>GOOGL</td><td contenteditable="true">100</td><td><input type="number" step="0.01" placeholder="Preço"></td><td class="units">—</td></tr>
+      <tr><td>TSLA</td><td contenteditable="true">100</td><td><input type="number" step="0.01" placeholder="Preço"></td><td class="units">—</td></tr>
+      <tr><td>INFY</td><td contenteditable="true">100</td><td><input type="number" step="0.01" placeholder="Preço"></td><td class="units">—</td></tr>
+    </tbody>
+  </table>
 
-  <div class="footer">Fonte: TwelveData, CoinGecko, Google Finance, JustETF</div>
+  <canvas id="portfolioChart" width="400" height="200"></canvas>
 
   <script>
-    // ✅ TUA API KEY TwelveData
-    const apiKey = "0debbec4427d429c993d43982dbf9848";
+    const ctx = document.getElementById('portfolioChart').getContext('2d');
+    let chart;
 
-    const portfolio = [
-      { symbol: "VUAA.L", percent: 18, value: 90, segment: "ETF S&P500 (IE00BFMXXD54)" },
-      { symbol: "MSFT", percent: 6, value: 30, segment: "Tech / Cloud" },
-      { symbol: "NVDA", percent: 4, value: 20, segment: "AI / Chips" },
-      { symbol: "LLY", percent: 5, value: 25, segment: "Farma / Biotech" },
-      { symbol: "AVGO", percent: 5, value: 25, segment: "Infraestrutura AI" },
-      { symbol: "GOOGL", percent: 5, value: 25, segment: "Cloud / Ads / IA" },
-      { symbol: "TSLA", percent: 4, value: 20, segment: "Energia / Mobilidade" },
-      { symbol: "INFY", percent: 3, value: 15, segment: "Serviços TI" },
-      { symbol: "IGLD.L", percent: 30, value: 150, segment: "Ouro físico ETC" },
-      { symbol: "BTC-EUR", percent: 15, value: 75, segment: "Cripto" }
-    ];
+    function updateCurrent() {
+      const rows = document.querySelectorAll("#currentTable tbody tr");
+      const data = [];
+      let total = 0;
 
-    const tableBody = document.querySelector("#portfolioTable tbody");
+      rows.forEach(r => {
+        const invested = parseFloat(r.children[2].innerText);
+        const units = parseFloat(r.children[1].innerText);
+        const price = parseFloat(r.querySelector("input").value);
 
-    function loadTable() {
-      tableBody.innerHTML = "";
-      portfolio.forEach(p => {
-        const row = `
-          <tr>
-            <td>${p.symbol}</td>
-            <td>${p.percent}%</td>
-            <td contenteditable="true">${p.value.toFixed(2)}</td>
-            <td><input type="text" placeholder="—" class="priceInput"></td>
-            <td class="units">—</td>
-            <td>${p.segment}</td>
-          </tr>`;
-        tableBody.insertAdjacentHTML("beforeend", row);
+        if (!isNaN(price)) {
+          const atual = units * price;
+          const ganho = atual - invested;
+          const perc = (ganho / invested) * 100;
+
+          r.querySelector(".valorAtual").innerText = atual.toFixed(2);
+          r.querySelector(".ganhoValor").innerText = ganho.toFixed(2);
+          r.querySelector(".ganhoValor").className = ganho >= 0 ? "gain" : "loss";
+          r.querySelector(".ganhoPerc").innerText = perc.toFixed(2) + "%";
+          r.querySelector(".ganhoPerc").className = perc >= 0 ? "gain" : "loss";
+
+          total += atual;
+          data.push({ name: r.children[0].innerText, value: atual });
+        }
+      });
+
+      updateChart(data);
+    }
+
+    function updateFuture() {
+      const rows = document.querySelectorAll("#futureTable tbody tr");
+      const data = [];
+
+      rows.forEach(r => {
+        const value = parseFloat(r.children[1].innerText);
+        const price = parseFloat(r.querySelector("input").value);
+        if (!isNaN(price) && !isNaN(value)) {
+          const units = value / price;
+          r.querySelector(".units").innerText = units.toFixed(3);
+          data.push({ name: r.children[0].innerText, value });
+        }
+      });
+
+      return data;
+    }
+
+    function updateChart(extra = []) {
+      const currentRows = document.querySelectorAll("#currentTable tbody tr");
+      const chartData = [];
+
+      currentRows.forEach(r => {
+        const price = parseFloat(r.querySelector("input").value);
+        const units = parseFloat(r.children[1].innerText);
+        if (!isNaN(price)) {
+          chartData.push({ label: r.children[0].innerText, value: units * price });
+        }
+      });
+
+      const futureData = updateFuture();
+      const allData = [...chartData, ...futureData];
+      const labels = allData.map(d => d.label);
+      const values = allData.map(d => d.value);
+
+      if (chart) chart.destroy();
+      chart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels,
+          datasets: [{
+            data: values,
+          }]
+        },
+        options: {
+          plugins: {
+            legend: { labels: { color: '#e0e0e0' } }
+          }
+        }
       });
     }
 
-    async function fetchPrice(symbol) {
-      const turl = `https://api.twelvedata.com/price?symbol=${symbol}&apikey=${apiKey}&currency=EUR`;
-      try {
-        const r = await fetch(turl);
-        const j = await r.json();
-        if (j && j.price && !isNaN(j.price)) return parseFloat(j.price);
-      } catch (e) {}
-
-      // fallback BTC
-      if (symbol.includes("BTC")) {
-        const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur");
-        const data = await res.json();
-        return data.bitcoin.eur;
-      }
-
-      // fallback Google Finance (scraping leve)
-      try {
-        const gsym = symbol.replace(".L", ":LON");
-        const gres = await fetch(`https://www.google.com/finance/quote/${gsym}`);
-        const text = await gres.text();
-        const match = text.match(/"regularMarketPrice":\{"raw":([\d.]+)/);
-        if (match && match[1]) return parseFloat(match[1]);
-      } catch (e) {}
-
-      return NaN;
-    }
-
-    async function updatePortfolio() {
-      const rows = document.querySelectorAll("#portfolioTable tbody tr");
-
-      for (let i = 0; i < portfolio.length; i++) {
-        const p = portfolio[i];
-        const row = rows[i];
-        const value = parseFloat(row.children[2].innerText);
-        const priceField = row.querySelector(".priceInput");
-
-        let price = await fetchPrice(p.symbol);
-
-        if (!isNaN(price)) {
-          priceField.value = price.toFixed(2);
-          priceField.disabled = true;
-          const units = (value / price).toFixed(3);
-          row.children[4].innerText = units;
-        } else {
-          priceField.disabled = false;
-          priceField.placeholder = "Digite €";
-          row.children[4].innerText = "—";
-        }
-
-        priceField.addEventListener("input", () => {
-          const manualPrice = parseFloat(priceField.value);
-          if (!isNaN(manualPrice)) {
-            const units = (value / manualPrice).toFixed(3);
-            row.children[4].innerText = units;
-          } else {
-            row.children[4].innerText = "—";
-          }
-        });
-      }
-    }
-
-    loadTable();
+    document.querySelectorAll("input").forEach(inp => inp.addEventListener("input", () => {
+      updateCurrent();
+      updateChart();
+    }));
   </script>
+
 </body>
 </html>
