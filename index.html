@@ -1,49 +1,30 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-PT">
 <head>
-  <meta charset="UTF-8">
-  <title>📊 Monitor de Carteira - Gestão Manual</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body {
-      background: #0a0a0a;
-      color: #e0e0e0;
-      font-family: Arial, sans-serif;
-      margin: 20px;
-    }
-    h1, h2 { color: #00ffcc; }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    th, td {
-      border: 1px solid #444;
-      padding: 8px;
-      text-align: center;
-    }
-    th {
-      background: #1e1e1e;
-    }
-    input[type="number"] {
-      background: #1a1a1a;
-      color: #fff;
-      border: 1px solid #444;
-      border-radius: 3px;
-      text-align: right;
-      width: 90px;
-    }
-    .gain { color: #00ff99; }
-    .loss { color: #ff6666; }
-    canvas { margin-top: 40px; }
-  </style>
+<meta charset="utf-8"/>
+<title>Carteira — Atual + Futuro (funcional)</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  body{font-family:Arial,Helvetica,sans-serif;background:#0b1220;color:#e6eef8;margin:18px}
+  h1{color:#6ee7b7}
+  table{width:100%;border-collapse:collapse;margin-top:12px}
+  th,td{border:1px solid #28445a;padding:8px;text-align:center}
+  th{background:#0f2433;color:#cfeff0}
+  input[type="number"]{width:110px;padding:6px;border-radius:4px;border:1px solid #2b4456;background:#07121a;color:#e6eef8;text-align:right}
+  td[contenteditable="true"]{background:#071826;color:#e6eef8;padding:6px;border-radius:4px}
+  .gain{color:#7ee787;font-weight:700}
+  .loss{color:#ff7a7a;font-weight:700}
+  .small{font-size:13px;color:#9fb6c6}
+  .row-actions{margin-top:10px}
+  button{background:#6ee7b7;color:#013; border:0;padding:8px 12px;border-radius:6px;cursor:pointer}
+  canvas{background:#07121a;border-radius:8px;padding:8px;margin-top:18px}
+</style>
 </head>
 <body>
+  <h1>📊 Monitor de Carteira — Atual + Futuro</h1>
+  <p class="small">Insere manualmente o preço atual (EUR) e/ou os valores planeados; a tabela e o gráfico atualizam imediatamente.</p>
 
-  <h1>📈 Monitoramento de Carteira (Atual + Futura)</h1>
-  <p>Atualize manualmente o preço atual para ver ganhos/perdas e projeção da carteira.</p>
-
-  <h2>1️⃣ Carteira Atual</h2>
+  <h2>Carteira Atual</h2>
   <table id="currentTable">
     <thead>
       <tr>
@@ -59,154 +40,209 @@
     <tbody>
       <tr>
         <td>VUAA.MIL</td>
-        <td>5.59244187</td>
-        <td>630.49</td>
-        <td><input type="number" step="0.01" placeholder="Preço atual"></td>
-        <td class="valorAtual">—</td>
-        <td class="ganhoValor">—</td>
-        <td class="ganhoPerc">—</td>
+        <td class="units">5.59244187</td>
+        <td class="invested">630.49</td>
+        <td><input class="price-cur" type="number" step="0.01" placeholder="ex: 112.15"></td>
+        <td class="val-now">—</td>
+        <td class="gain-abs">—</td>
+        <td class="gain-pct">—</td>
       </tr>
       <tr>
-        <td>QSVE.XETR</td>
-        <td>16.49031194</td>
-        <td>604.53</td>
-        <td><input type="number" step="0.01" placeholder="Preço atual"></td>
-        <td class="valorAtual">—</td>
-        <td class="ganhoValor">—</td>
-        <td class="ganhoPerc">—</td>
+        <td>QSVE-XETR</td>
+        <td class="units">16.49031194</td>
+        <td class="invested">604.53</td>
+        <td><input class="price-cur" type="number" step="0.01" placeholder="ex: 36.63"></td>
+        <td class="val-now">—</td>
+        <td class="gain-abs">—</td>
+        <td class="gain-pct">—</td>
       </tr>
       <tr>
-        <td>IGLD.XETR</td>
-        <td>7.64058679</td>
-        <td>557.15</td>
-        <td><input type="number" step="0.01" placeholder="Preço atual"></td>
-        <td class="valorAtual">—</td>
-        <td class="ganhoValor">—</td>
-        <td class="ganhoPerc">—</td>
+        <td>IGLD-XETR</td>
+        <td class="units">7.64058679</td>
+        <td class="invested">557.15</td>
+        <td><input class="price-cur" type="number" step="0.01" placeholder="ex: 70.17"></td>
+        <td class="val-now">—</td>
+        <td class="gain-abs">—</td>
+        <td class="gain-pct">—</td>
       </tr>
       <tr>
         <td>MSFT</td>
-        <td>1.0208905</td>
-        <td>448.00</td>
-        <td><input type="number" step="0.01" placeholder="Preço atual"></td>
-        <td class="valorAtual">—</td>
-        <td class="ganhoValor">—</td>
-        <td class="ganhoPerc">—</td>
+        <td class="units">1.0208905</td>
+        <td class="invested">448.00</td>
+        <td><input class="price-cur" type="number" step="0.01" placeholder="ex: 456.70"></td>
+        <td class="val-now">—</td>
+        <td class="gain-abs">—</td>
+        <td class="gain-pct">—</td>
       </tr>
     </tbody>
   </table>
 
-  <h2>2️⃣ Futuras Oportunidades</h2>
+  <h2>Futuras Oportunidades (projeta quanto queres comprar)</h2>
   <table id="futureTable">
     <thead>
       <tr>
         <th>Ativo</th>
-        <th>Valor Planeado (€)</th>
+        <th>Valor Planeado (€) (edita)</th>
         <th>Preço Atual (€)</th>
         <th>Unidades Est.</th>
       </tr>
     </thead>
     <tbody>
-      <tr><td>NVDA</td><td contenteditable="true">100</td><td><input type="number" step="0.01" placeholder="Preço"></td><td class="units">—</td></tr>
-      <tr><td>LLY</td><td contenteditable="true">100</td><td><input type="number" step="0.01" placeholder="Preço"></td><td class="units">—</td></tr>
-      <tr><td>AVGO</td><td contenteditable="true">100</td><td><input type="number" step="0.01" placeholder="Preço"></td><td class="units">—</td></tr>
-      <tr><td>GOOGL</td><td contenteditable="true">100</td><td><input type="number" step="0.01" placeholder="Preço"></td><td class="units">—</td></tr>
-      <tr><td>TSLA</td><td contenteditable="true">100</td><td><input type="number" step="0.01" placeholder="Preço"></td><td class="units">—</td></tr>
-      <tr><td>INFY</td><td contenteditable="true">100</td><td><input type="number" step="0.01" placeholder="Preço"></td><td class="units">—</td></tr>
+      <tr>
+        <td>NVDA</td>
+        <td contenteditable="true" class="planned">100</td>
+        <td><input class="price-fut" type="number" step="0.01" placeholder="preço"></td>
+        <td class="units-fut">—</td>
+      </tr>
+      <tr>
+        <td>LLY</td>
+        <td contenteditable="true" class="planned">100</td>
+        <td><input class="price-fut" type="number" step="0.01" placeholder="preço"></td>
+        <td class="units-fut">—</td>
+      </tr>
+      <tr>
+        <td>AVGO</td>
+        <td contenteditable="true" class="planned">100</td>
+        <td><input class="price-fut" type="number" step="0.01" placeholder="preço"></td>
+        <td class="units-fut">—</td>
+      </tr>
+      <tr>
+        <td>GOOGL</td>
+        <td contenteditable="true" class="planned">100</td>
+        <td><input class="price-fut" type="number" step="0.01" placeholder="preço"></td>
+        <td class="units-fut">—</td>
+      </tr>
+      <tr>
+        <td>TSLA</td>
+        <td contenteditable="true" class="planned">100</td>
+        <td><input class="price-fut" type="number" step="0.01" placeholder="preço"></td>
+        <td class="units-fut">—</td>
+      </tr>
+      <tr>
+        <td>INFY</td>
+        <td contenteditable="true" class="planned">100</td>
+        <td><input class="price-fut" type="number" step="0.01" placeholder="preço"></td>
+        <td class="units-fut">—</td>
+      </tr>
     </tbody>
   </table>
 
-  <canvas id="portfolioChart" width="400" height="200"></canvas>
+  <div style="margin-top:12px" class="row-actions">
+    <button id="btnRecalc">Recalcular & Atualizar Gráfico</button>
+  </div>
 
-  <script>
-    const ctx = document.getElementById('portfolioChart').getContext('2d');
-    let chart;
+  <canvas id="pieChart" width="600" height="300"></canvas>
 
-    function updateCurrent() {
-      const rows = document.querySelectorAll("#currentTable tbody tr");
-      const data = [];
-      let total = 0;
+<script>
+/* UTIL helpers */
+function toNum(v){
+  if(v === null || v === undefined) return NaN;
+  if(typeof v === 'number') return v;
+  // accept comma or dot
+  v = String(v).trim().replace(/\s/g,'').replace(',','.');
+  const n = parseFloat(v);
+  return isNaN(n) ? NaN : n;
+}
 
-      rows.forEach(r => {
-        const invested = parseFloat(r.children[2].innerText);
-        const units = parseFloat(r.children[1].innerText);
-        const price = parseFloat(r.querySelector("input").value);
-
-        if (!isNaN(price)) {
-          const atual = units * price;
-          const ganho = atual - invested;
-          const perc = (ganho / invested) * 100;
-
-          r.querySelector(".valorAtual").innerText = atual.toFixed(2);
-          r.querySelector(".ganhoValor").innerText = ganho.toFixed(2);
-          r.querySelector(".ganhoValor").className = ganho >= 0 ? "gain" : "loss";
-          r.querySelector(".ganhoPerc").innerText = perc.toFixed(2) + "%";
-          r.querySelector(".ganhoPerc").className = perc >= 0 ? "gain" : "loss";
-
-          total += atual;
-          data.push({ name: r.children[0].innerText, value: atual });
-        }
-      });
-
-      updateChart(data);
+/* Update current table values and gains */
+function updateCurrentTable(){
+  const rows = document.querySelectorAll('#currentTable tbody tr');
+  const currentData = [];
+  rows.forEach(row=>{
+    const units = toNum(row.querySelector('.units').innerText);
+    const invested = toNum(row.querySelector('.invested').innerText);
+    const priceInput = row.querySelector('.price-cur');
+    const price = toNum(priceInput.value);
+    if(!isNaN(price)){
+      const valNow = units * price;
+      const gainAbs = valNow - invested;
+      const gainPct = invested !== 0 ? (gainAbs / invested) * 100 : 0;
+      row.querySelector('.val-now').innerText = valNow.toFixed(2);
+      row.querySelector('.gain-abs').innerText = gainAbs.toFixed(2);
+      row.querySelector('.gain-pct').innerText = gainPct.toFixed(2) + '%';
+      row.querySelector('.gain-abs').className = 'gain-abs ' + (gainAbs>=0 ? 'gain' : 'loss');
+      row.querySelector('.gain-pct').className = 'gain-pct ' + (gainPct>=0 ? 'gain' : 'loss');
+      currentData.push({label: row.children[0].innerText, value: valNow});
+    } else {
+      // no price yet
+      row.querySelector('.val-now').innerText = '—';
+      row.querySelector('.gain-abs').innerText = '—';
+      row.querySelector('.gain-pct').innerText = '—';
     }
+  });
+  return currentData;
+}
 
-    function updateFuture() {
-      const rows = document.querySelectorAll("#futureTable tbody tr");
-      const data = [];
-
-      rows.forEach(r => {
-        const value = parseFloat(r.children[1].innerText);
-        const price = parseFloat(r.querySelector("input").value);
-        if (!isNaN(price) && !isNaN(value)) {
-          const units = value / price;
-          r.querySelector(".units").innerText = units.toFixed(3);
-          data.push({ name: r.children[0].innerText, value });
-        }
-      });
-
-      return data;
+/* Update future table units */
+function updateFutureTable(){
+  const rows = document.querySelectorAll('#futureTable tbody tr');
+  const futureData = [];
+  rows.forEach(row=>{
+    const plannedCell = row.querySelector('.planned');
+    const planned = toNum(plannedCell.innerText);
+    const priceInput = row.querySelector('.price-fut');
+    const price = toNum(priceInput.value);
+    if(!isNaN(price) && !isNaN(planned) && price > 0){
+      const units = planned / price;
+      row.querySelector('.units-fut').innerText = units.toFixed(6);
+      futureData.push({label: row.children[0].innerText, value: planned});
+    } else {
+      row.querySelector('.units-fut').innerText = '—';
     }
+  });
+  return futureData;
+}
 
-    function updateChart(extra = []) {
-      const currentRows = document.querySelectorAll("#currentTable tbody tr");
-      const chartData = [];
-
-      currentRows.forEach(r => {
-        const price = parseFloat(r.querySelector("input").value);
-        const units = parseFloat(r.children[1].innerText);
-        if (!isNaN(price)) {
-          chartData.push({ label: r.children[0].innerText, value: units * price });
-        }
-      });
-
-      const futureData = updateFuture();
-      const allData = [...chartData, ...futureData];
-      const labels = allData.map(d => d.label);
-      const values = allData.map(d => d.value);
-
-      if (chart) chart.destroy();
-      chart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-          labels,
-          datasets: [{
-            data: values,
-          }]
-        },
-        options: {
-          plugins: {
-            legend: { labels: { color: '#e0e0e0' } }
-          }
-        }
-      });
+/* Chart */
+let pieChart = null;
+function drawChart(dataItems){
+  const ctx = document.getElementById('pieChart').getContext('2d');
+  const labels = dataItems.map(d=>d.label);
+  const data = dataItems.map(d=>d.value);
+  if(pieChart) pieChart.destroy();
+  pieChart = new Chart(ctx, {
+    type:'pie',
+    data:{labels, datasets:[{data, backgroundColor: [
+      '#0dd3b2','#4fb8ff','#f2b134','#ff6b6b','#a986ff','#7ee787','#ffd66b','#8bd3ff','#c2b7ff','#ffd0e0'
+    ]}]},
+    options:{
+      plugins:{legend:{labels:{color:'#e6eef8'}}}
     }
+  });
+}
 
-    document.querySelectorAll("input").forEach(inp => inp.addEventListener("input", () => {
-      updateCurrent();
-      updateChart();
-    }));
-  </script>
+/* Main recompute flow */
+function recomputeAll(){
+  const cur = updateCurrentTable();
+  const fut = updateFutureTable();
+  // combine for chart: use current values and future planned values
+  const combined = [...cur, ...fut];
+  // if nothing to show set empty dataset to avoid Chart error
+  if(combined.length === 0){
+    drawChart([{label:'Sem dados', value:1}]);
+  } else {
+    drawChart(combined);
+  }
+}
 
+/* Event wiring */
+document.getElementById('btnRecalc').addEventListener('click', recomputeAll);
+
+// auto-update when user types in price inputs (current)
+document.querySelectorAll('.price-cur').forEach(inp=>{
+  inp.addEventListener('input', ()=>{ recomputeAll(); });
+});
+// auto-update when user types prices for future
+document.querySelectorAll('.price-fut').forEach(inp=>{
+  inp.addEventListener('input', ()=>{ recomputeAll(); });
+});
+// detect contenteditable planned changes (future amounts)
+document.querySelectorAll('#futureTable .planned').forEach(cell=>{
+  cell.addEventListener('input', ()=>{ recomputeAll(); });
+});
+
+// initial draw
+recomputeAll();
+</script>
 </body>
 </html>
